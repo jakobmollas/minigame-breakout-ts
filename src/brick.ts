@@ -15,20 +15,20 @@ export default class Brick {
         this._active = isActive;
     }
 
-    public get score(): number { return this._score; }
-    public get isTopRow(): boolean { return this._isTopRow; }
-    public get active(): boolean { return this._active; }
-    public get rectangle(): Rectangle { return this._rect.clone(); }
+    get score(): number { return this._score; }
+    get isTopRow(): boolean { return this._isTopRow; }
+    get active(): boolean { return this._active; }
+    get rectangle(): Rectangle { return this._rect.clone(); }
 
-    public hit(): void {
+    hit(): void {
         this._active = false;
     }
 
-    public reset(): void {
+    reset(): void {
         this._active = true;
     }
 
-    public draw(ctx: CanvasRenderingContext2D): void {
+    draw(ctx: CanvasRenderingContext2D): void {
         if (!this._active) return;
 
         ctx.fillStyle = this._color;
