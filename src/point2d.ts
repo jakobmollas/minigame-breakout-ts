@@ -1,4 +1,4 @@
-export default class Point2d {
+export class Point2d {
     x: number = 0;
     y: number = 0;
 

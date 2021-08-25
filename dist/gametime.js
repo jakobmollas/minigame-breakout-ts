@@ -1,4 +1,4 @@
-export default class GameTime {
+export class GameTime {
     constructor() {
         this._deltaTime = 0;
         this._deltaTimeFactor = 0;

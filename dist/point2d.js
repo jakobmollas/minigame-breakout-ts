@@ -1,4 +1,4 @@
-export default class Point2d {
+export class Point2d {
     constructor(x, y) {
         this.x = 0;
         this.y = 0;

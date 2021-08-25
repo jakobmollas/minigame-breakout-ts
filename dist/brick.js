@@ -1,5 +1,5 @@
-import Rectangle from "./rectangle.js";
-export default class Brick {
+import { Rectangle } from "./rectangle.js";
+export class Brick {
     constructor(x, y, width, height, color, score, isTopRow, isActive) {
         this._isTopRow = false;
         this._active = true;

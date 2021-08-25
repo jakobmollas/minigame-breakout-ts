@@ -1,4 +1,4 @@
-export default class GameTime {
+export class GameTime {
     private _deltaTime: number = 0;
     private _deltaTimeFactor: number = 0;
     private _fps: number = 0;

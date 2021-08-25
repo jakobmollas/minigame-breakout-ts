@@ -1,6 +1,6 @@
-import Rectangle from "./rectangle.js";
+import { Rectangle } from "./rectangle.js";
 
-export default class Brick {
+export class Brick {
     private _color: string;
     private _score: number;
     private _isTopRow: boolean = false;

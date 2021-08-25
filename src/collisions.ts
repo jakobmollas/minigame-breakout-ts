@@ -1,6 +1,6 @@
-import Ball from "ball.js";
-import Rectangle from "rectangle.js";
-import Vector2d from "./vector2d.js"
+import { Ball } from "ball.js";
+import { Rectangle } from "rectangle.js";
+import { Vector2d } from "./vector2d.js"
 
 enum PointOfImpact { NONE, LEFT, RIGHT, TOP, BOTTOM };
 
@@ -86,5 +86,4 @@ function ballIntersectsRectangle(ball: Ball, rectangle: Rectangle): boolean {
     return cornerDistance_sq <= ball.radius * ball.radius;
 }
 
-export { PointOfImpact };
-export default { ballToInnerRectangle, ballToRectangle, PointOfImpact };
+export { ballToInnerRectangle, ballToRectangle, PointOfImpact };

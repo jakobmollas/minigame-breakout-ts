@@ -1,5 +1,5 @@
-import Rectangle from "./rectangle.js";
-export default class Bat {
+import { Rectangle } from "./rectangle.js";
+export class Bat {
     constructor(x, y, width, height, color) {
         this._initialWidth = 0;
         this._rect = new Rectangle(x, y, width, height);

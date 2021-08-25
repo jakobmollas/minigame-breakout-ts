@@ -1,11 +1,11 @@
-import Ball from './ball.js';
-import Bat from './bat.js';
-import Brick from './brick.js';
-import GameTime from './gametime.js';
-import Point2d from './point2d.js';
-import Rectangle from './rectangle.js';
-import UI from "./ui.js";
-import Collisions, { PointOfImpact } from './collisions.js';
+import { Ball } from './ball.js';
+import { Bat } from './bat.js';
+import { Brick } from './brick.js';
+import { GameTime } from './gametime.js';
+import { Point2d } from './point2d.js';
+import { Rectangle } from './rectangle.js';
+import { UI } from "./ui.js";
+import * as Collisions from './collisions.js';
 import * as Constants from './constants.js';
 import * as Colors from "./colors.js";
 

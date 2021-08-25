@@ -1,5 +1,5 @@
-import Vector2d from "./vector2d.js";
-export default class Ball {
+import { Vector2d } from "./vector2d.js";
+export class Ball {
     constructor(x, y, radius, direction) {
         this._radius = 0;
         this.color = "";

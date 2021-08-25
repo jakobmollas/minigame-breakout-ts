@@ -1,4 +1,4 @@
-import Vector2d from "./vector2d.js";
+import { Vector2d } from "./vector2d.js";
 var PointOfImpact;
 (function (PointOfImpact) {
     PointOfImpact[PointOfImpact["NONE"] = 0] = "NONE";
@@ -79,6 +79,5 @@ function ballIntersectsRectangle(ball, rectangle) {
     // Intersection at corner?
     return cornerDistance_sq <= ball.radius * ball.radius;
 }
-export { PointOfImpact };
-export default { ballToInnerRectangle, ballToRectangle, PointOfImpact };
+export { ballToInnerRectangle, ballToRectangle, PointOfImpact };
 //# sourceMappingURL=collisions.js.map

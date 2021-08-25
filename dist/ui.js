@@ -35,5 +35,5 @@ function setFont(ctx, sizeInRem) {
     ctx.textAlign = "center";
     ctx.textBaseline = 'middle';
 }
-export default { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
+export { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
 //# sourceMappingURL=ui.js.map

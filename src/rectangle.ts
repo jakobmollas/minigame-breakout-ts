@@ -1,4 +1,4 @@
-export default class Rectangle {
+export class Rectangle {
     left: number = 0;
     top: number = 0;
     width: number = 0;

@@ -1,6 +1,6 @@
-import Rectangle from "./rectangle.js";
+import { Rectangle } from "./rectangle.js";
 
-export default class Bat {
+export class Bat {
     private _initialWidth: number = 0;
     private _rect: Rectangle;
 

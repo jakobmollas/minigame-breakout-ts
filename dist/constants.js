@@ -1,4 +1,4 @@
-import Vector2d from './vector2d.js';
+import { Vector2d } from './vector2d.js';
 export const borderWidth = 10;
 export const gameAreaWidth = 540;
 export const gameAreaHeight = 360;

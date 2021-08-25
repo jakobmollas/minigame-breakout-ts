@@ -47,4 +47,4 @@ function setFont(ctx: CanvasRenderingContext2D, sizeInRem: number): void {
     ctx.textBaseline = 'middle';
 }
 
-export default { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
+export { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };

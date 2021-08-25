@@ -1,4 +1,4 @@
-export default class Vector2d {
+export class Vector2d {
     x: number = 0;
     y: number = 0;
 

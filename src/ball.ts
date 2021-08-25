@@ -1,6 +1,6 @@
-import Vector2d from "./vector2d.js";
+import { Vector2d } from "./vector2d.js";
 
-export default class Ball {
+export class Ball {
     private _pos: Vector2d;
     private _radius: number = 0;
     private _currentDirection: Vector2d;
