@@ -1,28 +1,27 @@
-import { Rectangle } from "./rectangle.js";
 export class Bat {
     constructor(x, y, width, height, color) {
-        this._initialWidth = 0;
-        this._rect = new Rectangle(x, y, width, height);
-        this._initialWidth = width;
+        this.x = x;
+        this.y = y;
         this.color = color;
+        this._initialWidth = 0;
+        this._width = width;
+        this._initialWidth = width;
+        this._height = height;
     }
-    get x() { return this._rect.left; }
-    set x(value) { this._rect.left = value; }
-    get y() { return this._rect.top; }
-    get width() { return this._rect.width; }
-    get isShrunken() { return this._rect.width < this._initialWidth; }
-    get rectangle() { return this._rect.clone(); }
+    get width() { return this._width; }
+    get height() { return this._width; }
+    get isShrunken() { return this._width < this._initialWidth; }
     shrink() {
         if (this.isShrunken)
             return;
-        this._rect.width *= 2 / 3;
+        this._width *= 2 / 3;
     }
     reset() {
-        this._rect.width = this._initialWidth;
+        this._width = this._initialWidth;
     }
     draw(ctx) {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this._rect.left, this._rect.top, this._rect.width, this._rect.height);
+        ctx.fillRect(this.x, this.y, this._width, this._height);
     }
 }
 //# sourceMappingURL=bat.js.map

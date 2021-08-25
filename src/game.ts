@@ -3,7 +3,7 @@ import { Bat } from './bat.js';
 import { Brick } from './brick.js';
 import { GameTime } from './gametime.js';
 import { Point2d } from './point2d.js';
-import { Rectangle } from './rectangle.js';
+import { Box } from './box.js';
 import * as UI from "./ui.js";
 import * as Collisions from './collisions.js';
 import * as Constants from './constants.js';
@@ -126,8 +126,8 @@ function positionBallOnTopOfBat(ball: Ball, bat: Bat): void {
 }
 
 function handleBallToWallCollision(): void {
-    const gameArea = new Rectangle(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
-    const pointOfImpact = Collisions.ballToInnerRectangle(ball, gameArea);
+    const gameArea = new Box(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
+    const pointOfImpact = Collisions.ballToInnerBox(ball, gameArea);
 
     switch (pointOfImpact) {
         case Collisions.PointOfImpact.LEFT:
@@ -157,7 +157,7 @@ function bounceBallAgainstTopWall(ball: Ball): void {
 }
 
 function handleBallToBatCollision(): void {
-    const pointOfImpact = Collisions.ballToRectangle(ball, bat.rectangle);
+    const pointOfImpact = Collisions.ballToBox(ball, bat);
     if (pointOfImpact !== Collisions.PointOfImpact.TOP)
         return;
 
@@ -175,8 +175,8 @@ function handleBallToBatCollision(): void {
 function handleBallToBrickCollision(): void {
     const bricksToCheck = getBricksAtAndAroundBallPosition(ball, bricks);
 
-    for (let brick of bricksToCheck.filter(b => b?.active)) {
-        const pointOfImpact = Collisions.ballToRectangle(ball, brick.rectangle);
+    for (let brick of bricksToCheck.filter(b => b?.isActive)) {
+        const pointOfImpact = Collisions.ballToBox(ball, brick);
         switch (pointOfImpact) {
             case Collisions.PointOfImpact.LEFT:
             case Collisions.PointOfImpact.RIGHT:
@@ -421,7 +421,7 @@ function getBrickAtCell(bricks: Brick[], col: number, row: number): Brick | null
 }
 
 function getActiveBricks(): Brick[] {
-    return bricks.filter(b => b?.active);
+    return bricks.filter(b => b?.isActive);
 }
 
 function clamp(value: number, min: number, max: number): number {

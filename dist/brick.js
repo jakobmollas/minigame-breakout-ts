@@ -1,29 +1,27 @@
-import { Rectangle } from "./rectangle.js";
 export class Brick {
     constructor(x, y, width, height, color, score, isTopRow, isActive) {
-        this._isTopRow = false;
-        this._active = true;
-        this._rect = new Rectangle(x, y, width, height);
-        this._color = color;
-        this._score = score;
-        this._isTopRow = isTopRow;
-        this._active = isActive;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.score = score;
+        this.isTopRow = isTopRow;
+        this._isActive = true;
+        this._isActive = isActive;
     }
-    get score() { return this._score; }
-    get isTopRow() { return this._isTopRow; }
-    get active() { return this._active; }
-    get rectangle() { return this._rect.clone(); }
+    get isActive() { return this._isActive; }
     hit() {
-        this._active = false;
+        this._isActive = false;
     }
     reset() {
-        this._active = true;
+        this._isActive = true;
     }
     draw(ctx) {
-        if (!this._active)
+        if (!this._isActive)
             return;
-        ctx.fillStyle = this._color;
-        ctx.fillRect(this._rect.left, this._rect.top, this._rect.width - 1, this._rect.height - 1);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width - 1, this.height - 1);
     }
 }
 //# sourceMappingURL=brick.js.map

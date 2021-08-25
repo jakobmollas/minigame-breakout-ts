@@ -3,7 +3,7 @@ import { Bat } from './bat.js';
 import { Brick } from './brick.js';
 import { GameTime } from './gametime.js';
 import { Point2d } from './point2d.js';
-import { Rectangle } from './rectangle.js';
+import { Box } from './box.js';
 import * as UI from "./ui.js";
 import * as Collisions from './collisions.js';
 import * as Constants from './constants.js';
@@ -107,8 +107,8 @@ function positionBallOnTopOfBat(ball, bat) {
     ball.y = bat.y - ball.radius;
 }
 function handleBallToWallCollision() {
-    const gameArea = new Rectangle(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
-    const pointOfImpact = Collisions.ballToInnerRectangle(ball, gameArea);
+    const gameArea = new Box(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
+    const pointOfImpact = Collisions.ballToInnerBox(ball, gameArea);
     switch (pointOfImpact) {
         case Collisions.PointOfImpact.LEFT:
         case Collisions.PointOfImpact.RIGHT:
@@ -132,7 +132,7 @@ function bounceBallAgainstTopWall(ball) {
     topWallHasBeenHit = true;
 }
 function handleBallToBatCollision() {
-    const pointOfImpact = Collisions.ballToRectangle(ball, bat.rectangle);
+    const pointOfImpact = Collisions.ballToBox(ball, bat);
     if (pointOfImpact !== Collisions.PointOfImpact.TOP)
         return;
     ball.invertY();
@@ -145,8 +145,8 @@ function handleBallToBatCollision() {
 }
 function handleBallToBrickCollision() {
     const bricksToCheck = getBricksAtAndAroundBallPosition(ball, bricks);
-    for (let brick of bricksToCheck.filter(b => b === null || b === void 0 ? void 0 : b.active)) {
-        const pointOfImpact = Collisions.ballToRectangle(ball, brick.rectangle);
+    for (let brick of bricksToCheck.filter(b => b === null || b === void 0 ? void 0 : b.isActive)) {
+        const pointOfImpact = Collisions.ballToBox(ball, brick);
         switch (pointOfImpact) {
             case Collisions.PointOfImpact.LEFT:
             case Collisions.PointOfImpact.RIGHT:
@@ -342,7 +342,7 @@ function getBrickAtCell(bricks, col, row) {
     return index >= bricks.length ? null : bricks[index];
 }
 function getActiveBricks() {
-    return bricks.filter(b => b === null || b === void 0 ? void 0 : b.active);
+    return bricks.filter(b => b === null || b === void 0 ? void 0 : b.isActive);
 }
 function clamp(value, min, max) {
     if (value > max)

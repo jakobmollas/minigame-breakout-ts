@@ -6,4 +6,4 @@ export class Box {
         this.height = height;
     }
 }
-//# sourceMappingURL=rectangle.js.map
+//# sourceMappingURL=box.js.map

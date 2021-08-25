@@ -1,36 +1,32 @@
-import { Rectangle } from "./rectangle.js";
+import { IBox } from "./iBox.js";
 
-export class Bat {
+export class Bat implements IBox {
     private _initialWidth: number = 0;
-    private _rect: Rectangle;
+    private _width: number;
+    private _height: number;
 
-    color;
-
-    constructor(x: number, y: number, width: number, height: number, color: string) {
-        this._rect = new Rectangle(x, y, width, height);
+    constructor(public x: number, public y: number, width: number, height: number, readonly color: string) {
+        this._width = width;
         this._initialWidth = width;
-        this.color = color;
+        this._height = height;
     }
 
-    get x(): number { return this._rect.left; }
-    set x(value: number) { this._rect.left = value; }
-    get y(): number { return this._rect.top; }
-    get width(): number { return this._rect.width; }
-    get isShrunken(): boolean { return this._rect.width < this._initialWidth; }
-    get rectangle(): Rectangle { return this._rect.clone(); }
+    get width(): number { return this._width; }
+    get height(): number { return this._width; }
+    get isShrunken(): boolean { return this._width < this._initialWidth; }
 
     shrink(): void {
         if (this.isShrunken) return;
 
-        this._rect.width *= 2 / 3;
+        this._width *= 2 / 3;
     }
 
     reset(): void {
-        this._rect.width = this._initialWidth;
+        this._width = this._initialWidth;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this._rect.left, this._rect.top, this._rect.width, this._rect.height);
+        ctx.fillRect(this.x, this.y, this._width, this._height);
     }
 }
