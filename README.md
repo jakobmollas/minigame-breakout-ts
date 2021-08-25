@@ -9,3 +9,5 @@ Live: https://jakobmollas.github.io/minigame-breakout-ts/
 
 This is my first attempt at writing TypeScript, I am sure I have messed it up all over the place, but overall the first impression is really good.
 The added typing and constructs provided by TypeScript really helps to build anything bigger than just a hack or prototype.
+
+![screenshot](docs/screenshot.png "Game screenshot")
