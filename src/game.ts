@@ -35,18 +35,11 @@ function initialize(): void {
 }
 
 function setupCanvasContext(): CanvasRenderingContext2D {
-    // Todo: This does not seem to work on high dpi, simplify?
     const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
     canvas.width = Constants.fullWidth;
     canvas.height = Constants.fullHeight;
 
-    // const dpr = 1 / (window.devicePixelRatio || 1);
-    // canvas.width = canvas.width * dpr;
-    // canvas.height = canvas.height * dpr;
-
-    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    //ctx.scale(dpr, dpr);
-
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     return ctx;
 }
 
