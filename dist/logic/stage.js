@@ -3,7 +3,7 @@ import { Point2d } from "../primitives/point2d.js";
 import * as Constants from "../definitions/constants.js";
 import * as Colors from "../definitions/colors.js";
 function createBricks() {
-    let bricks = [];
+    const bricks = [];
     for (let row = 0; row < Constants.rows; row++) {
         for (let col = 0; col < Constants.columns; col++) {
             const x = col * Constants.brickWidth;

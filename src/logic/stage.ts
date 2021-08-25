@@ -4,7 +4,7 @@ import * as Constants from "../definitions/constants.js";
 import * as Colors from "../definitions/colors.js";
 
 function createBricks(): Brick[] {
-    let bricks: Brick[] = [];
+    const bricks: Brick[] = [];
     for (let row = 0; row < Constants.rows; row++) {
         for (let col = 0; col < Constants.columns; col++) {
             const x = col * Constants.brickWidth;
@@ -57,7 +57,7 @@ function getCellFromStageXY(x: number, y: number): Point2d {
     return new Point2d(col, row);
 }
 
-function getBrickAtCell(bricks: Brick[], col: number, row: number): Brick | null {
+function getBrickAtCell(bricks: readonly Brick[], col: number, row: number): Brick | null {
     const index = row * Constants.columns + col;
     return index >= bricks.length ? null : bricks[index];
 }

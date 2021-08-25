@@ -202,7 +202,7 @@ function handleBallToBrickCollision(): void {
     }
 }
 
-function getBricksAtAndAroundBallPosition(ball: Ball, bricks: Brick[]): Brick[] {
+function getBricksAtAndAroundBallPosition(ball: Ball, bricks: readonly Brick[]): Brick[] {
     let targetBricks = [];
     let bc = Stage.getCellFromStageXY(ball.x, ball.y);
 
