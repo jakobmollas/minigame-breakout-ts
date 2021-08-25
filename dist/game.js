@@ -27,8 +27,8 @@ function initialize() {
 }
 function setupCanvasContext() {
     const canvas = document.getElementById("game-canvas");
-    canvas.width = Constants.fullWidth;
-    canvas.height = Constants.fullHeight;
+    canvas.width = Constants.FULL_WIDTH;
+    canvas.height = Constants.FULL_HEIGHT;
     const ctx = canvas.getContext('2d');
     return ctx;
 }
@@ -39,12 +39,12 @@ function mainLoop() {
     window.requestAnimationFrame(mainLoop);
 }
 function processGameLogic() {
-    if (gameState === GameState.LAUNCHING || gameState === GameState.RUNNING) {
+    if (gameState === GameState.Serving || gameState === GameState.Running) {
         moveBat();
         moveBall();
         updateBallColor();
     }
-    if (gameState === GameState.RUNNING) {
+    if (gameState === GameState.Running) {
         handleBallToWallCollision();
         handleBallToBatCollision();
         handleBallToBrickCollision();
@@ -61,28 +61,28 @@ function render() {
     UI.drawGameStats(ctx, score, lives);
     // game objects are drawn in an area excluding borders
     ctx.save();
-    ctx.translate(Constants.borderWidth, Constants.borderWidth);
+    ctx.translate(Constants.BORDER_WIDTH, Constants.BORDER_WIDTH);
     bricks.forEach(b => b === null || b === void 0 ? void 0 : b.draw(ctx));
     bat.draw(ctx);
     ball.draw(ctx);
     ctx.restore();
     switch (gameState) {
-        case GameState.LEVEL_UP:
+        case GameState.LevelUp:
             UI.drawLevelUp(ctx);
             break;
-        case GameState.BALL_LOST:
+        case GameState.BallLost:
             UI.drawBallLost(ctx);
             break;
-        case GameState.GAME_OVER:
+        case GameState.GameOver:
             UI.drawGameOver(ctx);
             break;
     }
 }
 function moveBat() {
-    bat.x = clamp(inputCenterX - bat.width / 2, 0, Constants.stageWidth - bat.width);
+    bat.x = clamp(inputCenterX - bat.width / 2, 0, Constants.STAGE_WIDTH - bat.width);
 }
 function moveBall() {
-    if (gameState === GameState.RUNNING) {
+    if (gameState === GameState.Running) {
         ball.move(gameSpeed * gameTime.deltaTimeFactor);
         return;
     }
@@ -98,24 +98,24 @@ function positionBallOnTopOfBat(ball, bat) {
     ball.y = bat.y - ball.radius;
 }
 function handleBallToWallCollision() {
-    const stage = new Box(0, 0, Constants.stageWidth, Constants.stageHeight);
+    const stage = new Box(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
     const pointOfImpact = Collisions.circleToInnerBox(ball, stage);
     switch (pointOfImpact) {
-        case PointOfImpact.LEFT:
-        case PointOfImpact.RIGHT:
+        case PointOfImpact.Left:
+        case PointOfImpact.Right:
             bounceBallAgainstHorizontalWall(ball);
             break;
-        case PointOfImpact.TOP:
+        case PointOfImpact.Top:
             bounceBallAgainstTopWall(ball);
             break;
-        case PointOfImpact.BOTTOM:
+        case PointOfImpact.Bottom:
             ballIsLost = true;
             break;
     }
 }
 function bounceBallAgainstHorizontalWall(ball) {
     ball.invertX();
-    ball.x = clamp(ball.x, ball.radius, Constants.stageWidth - ball.radius);
+    ball.x = clamp(ball.x, ball.radius, Constants.STAGE_WIDTH - ball.radius);
 }
 function bounceBallAgainstTopWall(ball) {
     ball.invertY();
@@ -124,7 +124,7 @@ function bounceBallAgainstTopWall(ball) {
 }
 function handleBallToBatCollision() {
     const pointOfImpact = Collisions.circleToBox(ball, ball.heading, bat);
-    if (pointOfImpact !== PointOfImpact.TOP)
+    if (pointOfImpact !== PointOfImpact.Top)
         return;
     ball.invertY();
     ball.y = bat.y - ball.radius;
@@ -139,12 +139,12 @@ function handleBallToBrickCollision() {
     for (let brick of bricksToCheck.filter(b => b === null || b === void 0 ? void 0 : b.isActive)) {
         const pointOfImpact = Collisions.circleToBox(ball, ball.heading, brick);
         switch (pointOfImpact) {
-            case PointOfImpact.LEFT:
-            case PointOfImpact.RIGHT:
+            case PointOfImpact.Left:
+            case PointOfImpact.Right:
                 ball.invertX();
                 break;
-            case PointOfImpact.TOP:
-            case PointOfImpact.BOTTOM:
+            case PointOfImpact.Top:
+            case PointOfImpact.Bottom:
                 ball.invertY();
                 break;
             default:
@@ -178,14 +178,14 @@ function getBricksAtAndAroundBallPosition(ball, bricks) {
     return targetBricks;
 }
 function handleSpeedUp() {
-    if (numberOfBrickHits === 4 && gameSpeed < Constants.speed2) {
-        gameSpeed = Constants.speed2;
+    if (numberOfBrickHits === 4 && gameSpeed < Constants.SPEED_2) {
+        gameSpeed = Constants.SPEED_2;
     }
-    else if (numberOfBrickHits === 12 && gameSpeed < Constants.speed3) {
-        gameSpeed = Constants.speed3;
+    else if (numberOfBrickHits === 12 && gameSpeed < Constants.SPEED_3) {
+        gameSpeed = Constants.SPEED_3;
     }
-    else if (topRowsHasBeenHit && gameSpeed < Constants.speed4) {
-        gameSpeed = Constants.speed4;
+    else if (topRowsHasBeenHit && gameSpeed < Constants.SPEED_4) {
+        gameSpeed = Constants.SPEED_4;
     }
 }
 function handleBatSize() {
@@ -195,18 +195,18 @@ function handleBatSize() {
 }
 function handleBallLost() {
     if (ballIsLost) {
-        gameState = GameState.BALL_LOST;
+        gameState = GameState.BallLost;
     }
 }
 function handleLevelUp() {
     if (level < 2 && getActiveBricks().length <= 0) {
-        gameState = GameState.LEVEL_UP;
+        gameState = GameState.LevelUp;
     }
 }
 function handleGameOver() {
-    const isGameOver = (lives <= 1 && gameState === GameState.BALL_LOST) ||
+    const isGameOver = (lives <= 1 && gameState === GameState.BallLost) ||
         (level >= 2 && getActiveBricks().length <= 0);
-    gameState = isGameOver ? GameState.GAME_OVER : gameState;
+    gameState = isGameOver ? GameState.GameOver : gameState;
 }
 function touchEnd(e) {
     e.preventDefault();
@@ -215,11 +215,11 @@ function touchEnd(e) {
 function touchMove(e) {
     var _a, _b;
     let xPos = (_b = (_a = e.changedTouches[0]) === null || _a === void 0 ? void 0 : _a.pageX) !== null && _b !== void 0 ? _b : 0;
-    inputCenterX = map(xPos, 0, window.innerWidth, 0, Constants.stageWidth);
+    inputCenterX = map(xPos, 0, window.innerWidth, 0, Constants.STAGE_WIDTH);
 }
 function mouseMove(e) {
     e.preventDefault();
-    inputCenterX = map(e.pageX, 0, window.innerWidth, 0, Constants.stageWidth);
+    inputCenterX = map(e.pageX, 0, window.innerWidth, 0, Constants.STAGE_WIDTH);
 }
 function mouseDown(e) {
     e.preventDefault();
@@ -227,23 +227,23 @@ function mouseDown(e) {
 }
 function handleRestart() {
     switch (gameState) {
-        case GameState.LAUNCHING:
-            gameState = GameState.RUNNING;
+        case GameState.Serving:
+            gameState = GameState.Running;
             break;
-        case GameState.LEVEL_UP:
+        case GameState.LevelUp:
             levelUp();
             break;
-        case GameState.BALL_LOST:
+        case GameState.BallLost:
             nextBall();
             break;
-        case GameState.GAME_OVER:
+        case GameState.GameOver:
             startNewGame();
             return;
     }
 }
 function createGameObjects() {
-    ball = new Ball(0, 0, Constants.ballRadius, Constants.initialBallDirection);
-    bat = new Bat(Constants.stageWidth / 2 - Constants.batWidth / 2, Constants.stageHeight - 2 * Constants.batHeight, Constants.batWidth, Constants.batHeight, Colors.bat);
+    ball = new Ball(0, 0, Constants.BALL_RADIUS, Constants.INITIAL_BALL_DIRECTION);
+    bat = new Bat(Constants.STAGE_WIDTH / 2 - Constants.BAT_WIDTH / 2, Constants.STAGE_HEIGHT - 2 * Constants.BAT_HEIGHT, Constants.BAT_WIDTH, Constants.BAT_HEIGHT, Colors.BAT);
     bricks = Stage.createBricks();
 }
 function startNewGame() {
@@ -257,7 +257,7 @@ function levelUp() {
     ball.reset();
     resetBricks();
     level++;
-    gameState = GameState.LAUNCHING;
+    gameState = GameState.Serving;
 }
 function nextBall() {
     lives--;
@@ -270,8 +270,8 @@ function prepareNextBall() {
     topRowsHasBeenHit = false;
     topWallHasBeenHit = false;
     ballIsLost = false;
-    gameSpeed = Constants.speed1;
-    gameState = GameState.LAUNCHING;
+    gameSpeed = Constants.SPEED_1;
+    gameState = GameState.Serving;
 }
 function resetBricks() {
     bricks.forEach(b => b === null || b === void 0 ? void 0 : b.reset());

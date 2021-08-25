@@ -2,15 +2,15 @@ import * as Colors from "../definitions/colors.js";
 import * as Constants from "../definitions/constants.js";
 
 function clearBackground(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = Colors.background;
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.fullHeight);
+    ctx.fillStyle = Colors.BACKGROUND;
+    ctx.fillRect(0, 0, Constants.FULL_WIDTH, Constants.FULL_HEIGHT);
 }
 
 function drawBorders(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = Colors.border;
-    ctx.fillRect(0, 0, Constants.borderWidth, Constants.fullHeight);
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.borderWidth);
-    ctx.fillRect(Constants.fullWidth - Constants.borderWidth, 0, Constants.borderWidth, Constants.fullHeight);
+    ctx.fillStyle = Colors.BORDER;
+    ctx.fillRect(0, 0, Constants.BORDER_WIDTH, Constants.FULL_HEIGHT);
+    ctx.fillRect(0, 0, Constants.FULL_WIDTH, Constants.BORDER_WIDTH);
+    ctx.fillRect(Constants.FULL_WIDTH - Constants.BORDER_WIDTH, 0, Constants.BORDER_WIDTH, Constants.FULL_HEIGHT);
 }
 
 function drawGameStats(ctx: CanvasRenderingContext2D, score: number, lives: number): void {
@@ -19,7 +19,7 @@ function drawGameStats(ctx: CanvasRenderingContext2D, score: number, lives: numb
     const x = ctx.canvas.width / 2;
     const y = 30;
 
-    ctx.fillStyle = Colors.stats;
+    ctx.fillStyle = Colors.STATS;
     ctx.fillText("SCORE: " + score + "   LIVES: " + lives, x, y);
 }
 
@@ -46,10 +46,10 @@ function drawGameMessage(ctx: CanvasRenderingContext2D, text: string): void {
 
 function createGradient(ctx: CanvasRenderingContext2D, yCenter: number): CanvasGradient {
     const g = ctx.createLinearGradient(0, yCenter - 20, 0, yCenter + 20);
-    g.addColorStop(0, Colors.messageGradient1);
-    g.addColorStop(0.45, Colors.messageGradient2);
-    g.addColorStop(0.45, Colors.messageGradient3);
-    g.addColorStop(1.0, Colors.messageGradient4);
+    g.addColorStop(0, Colors.MESSAGE_GRADIENT_1);
+    g.addColorStop(0.45, Colors.MESSAGE_GRADIENT_2);
+    g.addColorStop(0.45, Colors.MESSAGE_GRADIENT_3);
+    g.addColorStop(1.0, Colors.MESSAGE_GRADIENT_4);
 
     return g;
 }

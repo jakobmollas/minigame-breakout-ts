@@ -4,28 +4,28 @@ import * as Constants from "../definitions/constants.js";
 import * as Colors from "../definitions/colors.js";
 function createBricks() {
     const bricks = [];
-    for (let row = 0; row < Constants.rows; row++) {
-        for (let col = 0; col < Constants.columns; col++) {
-            const x = col * Constants.brickWidth;
-            const y = row * Constants.brickHeight;
+    for (let row = 0; row < Constants.ROWS; row++) {
+        for (let col = 0; col < Constants.COLUMNS; col++) {
+            const x = col * Constants.BRICK_WIDTH;
+            const y = row * Constants.BRICK_HEIGHT;
             const color = getRowColor(row);
             const score = getRowScore(row);
             const isTopRow = row >= 4 && row <= 5;
             const isActive = row > 3;
-            bricks.push(new Brick(x, y, Constants.brickWidth, Constants.brickHeight, color, score, isTopRow, isActive));
+            bricks.push(new Brick(x, y, Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT, color, score, isTopRow, isActive));
         }
     }
     return bricks;
 }
 function getRowColor(rowNumber) {
     switch (rowNumber) {
-        case 4: return Colors.brick1;
-        case 5: return Colors.brick2;
-        case 6: return Colors.brick3;
-        case 7: return Colors.brick4;
-        case 8: return Colors.brick5;
-        case 9: return Colors.brick6;
-        default: return Colors.brick1;
+        case 4: return Colors.BRICK_1;
+        case 5: return Colors.BRICK_2;
+        case 6: return Colors.BRICK_3;
+        case 7: return Colors.BRICK_4;
+        case 8: return Colors.BRICK_5;
+        case 9: return Colors.BRICK_6;
+        default: return Colors.BRICK_1;
     }
 }
 function getRowScore(rowNumber) {
@@ -40,12 +40,12 @@ function getRowScore(rowNumber) {
     }
 }
 function getCellFromStageXY(x, y) {
-    let col = Math.floor(x / Constants.brickWidth);
-    let row = Math.floor(y / Constants.brickHeight);
+    let col = Math.floor(x / Constants.BRICK_WIDTH);
+    let row = Math.floor(y / Constants.BRICK_HEIGHT);
     return new Point2d(col, row);
 }
 function getBrickAtCell(bricks, col, row) {
-    const index = row * Constants.columns + col;
+    const index = row * Constants.COLUMNS + col;
     return index >= bricks.length ? null : bricks[index];
 }
 export { createBricks, getRowColor, getCellFromStageXY, getBrickAtCell };

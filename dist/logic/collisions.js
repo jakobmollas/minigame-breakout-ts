@@ -2,29 +2,29 @@ import { Vector2d } from "../primitives/vector2d.js";
 import { PointOfImpact } from "../definitions/constants.js";
 function circleToInnerBox(circle, box) {
     if (circle.x < circle.radius)
-        return PointOfImpact.LEFT;
+        return PointOfImpact.Left;
     if (circle.x > box.width - circle.radius)
-        return PointOfImpact.RIGHT;
+        return PointOfImpact.Right;
     if (circle.y < circle.radius)
-        return PointOfImpact.TOP;
+        return PointOfImpact.Top;
     if (circle.y > box.height - circle.radius)
-        return PointOfImpact.BOTTOM;
-    return PointOfImpact.NONE;
+        return PointOfImpact.Bottom;
+    return PointOfImpact.None;
 }
 function circleToBox(circle, circleHeading, box) {
     if (!circleIntersectsBox(circle, box))
-        return PointOfImpact.NONE;
+        return PointOfImpact.None;
     const a = getCircleToBoxAngles(circle, box);
     // Compare (inverted) circle heading with angles calculated in previous step
     // to be able to determine at which side the circle hit the box
     const h = Vector2d.fromAngle(circleHeading).invert().heading;
     if (Vector2d.isHeadingBetween(h, a.a1, a.a2))
-        return PointOfImpact.TOP;
+        return PointOfImpact.Top;
     if (Vector2d.isHeadingBetween(h, a.a2, a.a3))
-        return PointOfImpact.LEFT;
+        return PointOfImpact.Left;
     if (Vector2d.isHeadingBetween(h, a.a3, a.a4))
-        return PointOfImpact.BOTTOM;
-    return PointOfImpact.RIGHT;
+        return PointOfImpact.Bottom;
+    return PointOfImpact.Right;
 }
 /**
 * Divide box into 4 angular sectors based on circle position

@@ -4,17 +4,17 @@ import { Vector2d } from "../primitives/vector2d.js"
 import { PointOfImpact } from "../definitions/constants.js";
 
 function circleToInnerBox(circle: ICircle, box: IBox): PointOfImpact {
-    if (circle.x < circle.radius) return PointOfImpact.LEFT;
-    if (circle.x > box.width - circle.radius) return PointOfImpact.RIGHT;
-    if (circle.y < circle.radius) return PointOfImpact.TOP;
-    if (circle.y > box.height - circle.radius) return PointOfImpact.BOTTOM;
+    if (circle.x < circle.radius) return PointOfImpact.Left;
+    if (circle.x > box.width - circle.radius) return PointOfImpact.Right;
+    if (circle.y < circle.radius) return PointOfImpact.Top;
+    if (circle.y > box.height - circle.radius) return PointOfImpact.Bottom;
 
-    return PointOfImpact.NONE;
+    return PointOfImpact.None;
 }
 
 function circleToBox(circle: ICircle, circleHeading: number, box: IBox): PointOfImpact {
     if (!circleIntersectsBox(circle, box))
-        return PointOfImpact.NONE;
+        return PointOfImpact.None;
 
     const a = getCircleToBoxAngles(circle, box);
 
@@ -22,10 +22,10 @@ function circleToBox(circle: ICircle, circleHeading: number, box: IBox): PointOf
     // to be able to determine at which side the circle hit the box
     const h = Vector2d.fromAngle(circleHeading).invert().heading;
 
-    if (Vector2d.isHeadingBetween(h, a.a1, a.a2)) return PointOfImpact.TOP;
-    if (Vector2d.isHeadingBetween(h, a.a2, a.a3)) return PointOfImpact.LEFT;
-    if (Vector2d.isHeadingBetween(h, a.a3, a.a4)) return PointOfImpact.BOTTOM;
-    return PointOfImpact.RIGHT;
+    if (Vector2d.isHeadingBetween(h, a.a1, a.a2)) return PointOfImpact.Top;
+    if (Vector2d.isHeadingBetween(h, a.a2, a.a3)) return PointOfImpact.Left;
+    if (Vector2d.isHeadingBetween(h, a.a3, a.a4)) return PointOfImpact.Bottom;
+    return PointOfImpact.Right;
 }
 
 /**

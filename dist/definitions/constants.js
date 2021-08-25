@@ -1,37 +1,37 @@
 import { Vector2d } from '../primitives/vector2d.js';
 export var PointOfImpact;
 (function (PointOfImpact) {
-    PointOfImpact[PointOfImpact["NONE"] = 0] = "NONE";
-    PointOfImpact[PointOfImpact["LEFT"] = 1] = "LEFT";
-    PointOfImpact[PointOfImpact["RIGHT"] = 2] = "RIGHT";
-    PointOfImpact[PointOfImpact["TOP"] = 3] = "TOP";
-    PointOfImpact[PointOfImpact["BOTTOM"] = 4] = "BOTTOM";
+    PointOfImpact[PointOfImpact["None"] = 0] = "None";
+    PointOfImpact[PointOfImpact["Left"] = 1] = "Left";
+    PointOfImpact[PointOfImpact["Right"] = 2] = "Right";
+    PointOfImpact[PointOfImpact["Top"] = 3] = "Top";
+    PointOfImpact[PointOfImpact["Bottom"] = 4] = "Bottom";
 })(PointOfImpact || (PointOfImpact = {}));
 ;
 export var GameState;
 (function (GameState) {
-    GameState[GameState["LAUNCHING"] = 0] = "LAUNCHING";
-    GameState[GameState["RUNNING"] = 1] = "RUNNING";
-    GameState[GameState["LEVEL_UP"] = 2] = "LEVEL_UP";
-    GameState[GameState["BALL_LOST"] = 3] = "BALL_LOST";
-    GameState[GameState["GAME_OVER"] = 4] = "GAME_OVER";
+    GameState[GameState["Serving"] = 0] = "Serving";
+    GameState[GameState["Running"] = 1] = "Running";
+    GameState[GameState["LevelUp"] = 2] = "LevelUp";
+    GameState[GameState["BallLost"] = 3] = "BallLost";
+    GameState[GameState["GameOver"] = 4] = "GameOver";
 })(GameState || (GameState = {}));
 ;
-export const borderWidth = 10;
-export const stageWidth = 540;
-export const stageHeight = 360;
-export const fullWidth = stageWidth + 2 * borderWidth;
-export const fullHeight = stageHeight + borderWidth;
-export const columns = 18;
-export const rows = 10;
-export const brickWidth = 30;
-export const brickHeight = 15;
-export const speed1 = 150; // pixels per second
-export const speed2 = 210;
-export const speed3 = 270;
-export const speed4 = 360;
-export const ballRadius = 5;
-export const initialBallDirection = new Vector2d(0.7, -1);
-export const batHeight = 0.5 * brickHeight;
-export const batWidth = 3 * brickWidth;
+export const BORDER_WIDTH = 10;
+export const STAGE_WIDTH = 540;
+export const STAGE_HEIGHT = 360;
+export const FULL_WIDTH = STAGE_WIDTH + 2 * BORDER_WIDTH;
+export const FULL_HEIGHT = STAGE_HEIGHT + BORDER_WIDTH;
+export const COLUMNS = 18;
+export const ROWS = 10;
+export const BRICK_WIDTH = 30;
+export const BRICK_HEIGHT = 15;
+export const SPEED_1 = 150; // pixels per second
+export const SPEED_2 = 210;
+export const SPEED_3 = 270;
+export const SPEED_4 = 360;
+export const BALL_RADIUS = 5;
+export const INITIAL_BALL_DIRECTION = new Vector2d(0.7, -1);
+export const BAT_HEIGHT = 0.5 * BRICK_HEIGHT;
+export const BAT_WIDTH = 3 * BRICK_WIDTH;
 //# sourceMappingURL=constants.js.map
