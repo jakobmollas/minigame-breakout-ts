@@ -1,4 +1,7 @@
-import { Vector2d } from './vector2d.js';
+import { Vector2d } from '../primitives/vector2d.js';
+
+export enum PointOfImpact { NONE, LEFT, RIGHT, TOP, BOTTOM };
+export enum GameState { LAUNCHING, RUNNING, LEVEL_UP, BALL_LOST, GAME_OVER };
 
 export const borderWidth = 10;
 export const gameAreaWidth = 540;

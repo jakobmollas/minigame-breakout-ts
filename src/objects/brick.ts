@@ -1,4 +1,4 @@
-import { IBox } from "./iBox.js";
+import { IBox } from "../primitives/ibox.js";
 
 export class Brick implements IBox {
     private _isActive: boolean = true;

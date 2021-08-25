@@ -1,4 +1,15 @@
-import * as Colors from "./colors.js";
+import * as Colors from "../definitions/colors.js";
+import * as Constants from "../definitions/constants.js";
+function clearBackground(ctx) {
+    ctx.fillStyle = Colors.background;
+    ctx.fillRect(0, 0, Constants.fullWidth, Constants.fullHeight);
+}
+function drawBorders(ctx) {
+    ctx.fillStyle = Colors.border;
+    ctx.fillRect(0, 0, Constants.borderWidth, Constants.fullHeight);
+    ctx.fillRect(0, 0, Constants.fullWidth, Constants.borderWidth);
+    ctx.fillRect(Constants.fullWidth - Constants.borderWidth, 0, Constants.borderWidth, Constants.fullHeight);
+}
 function drawGameStats(ctx, score, lives) {
     setFont(ctx, 1);
     const x = ctx.canvas.width / 2;
@@ -35,5 +46,5 @@ function setFont(ctx, sizeInRem) {
     ctx.textAlign = "center";
     ctx.textBaseline = 'middle';
 }
-export { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
+export { clearBackground, drawBorders, drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
 //# sourceMappingURL=ui.js.map

@@ -1,4 +1,4 @@
-import { IBox } from "./iBox.js";
+import { IBox } from "./ibox.js";
 
 export class Box implements IBox {
     constructor(

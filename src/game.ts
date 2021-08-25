@@ -1,15 +1,17 @@
-import { Ball } from './ball.js';
-import { Bat } from './bat.js';
-import { Brick } from './brick.js';
-import { GameTime } from './gametime.js';
-import { Point2d } from './point2d.js';
-import { Box } from './box.js';
-import * as UI from "./ui.js";
-import * as Collisions from './collisions.js';
-import * as Constants from './constants.js';
-import * as Colors from "./colors.js";
+import { Point2d } from './primitives/point2d.js';
+import { Box } from './primitives/box.js';
 
-enum GameState { LAUNCHING, RUNNING, LEVEL_UP, BALL_LOST, GAME_OVER };
+import { Ball } from './objects/ball.js';
+import { Bat } from './objects/bat.js';
+import { Brick } from './objects/brick.js';
+
+import { GameTime } from './logic/gametime.js';
+import * as UI from "./logic/ui.js";
+import * as Collisions from './logic/collisions.js';
+
+import * as Constants from './definitions/constants.js';
+import * as Colors from "./definitions/colors.js";
+import { GameState, PointOfImpact } from './definitions/constants.js';
 
 let ball: Ball, bat: Bat, bricks: Brick[];
 let score: number, lives: number, gameSpeed: number, level: number, numberOfBrickHits: number;
@@ -73,8 +75,9 @@ function processGameLogic(): void {
 }
 
 function render(): void {
-    clearBackground();
-    drawBorders();
+    UI.clearBackground(ctx);
+    UI.drawBorders(ctx);
+    UI.drawGameStats(ctx, score, lives);
 
     // game objects are drawn in an area excluding borders
     ctx.save();
@@ -83,8 +86,6 @@ function render(): void {
     bat.draw(ctx);
     ball.draw(ctx);
     ctx.restore();
-
-    UI.drawGameStats(ctx, score, lives);
 
     switch (gameState) {
         case GameState.LEVEL_UP:
@@ -127,19 +128,19 @@ function positionBallOnTopOfBat(ball: Ball, bat: Bat): void {
 
 function handleBallToWallCollision(): void {
     const gameArea = new Box(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
-    const pointOfImpact = Collisions.ballToInnerBox(ball, gameArea);
+    const pointOfImpact = Collisions.circleToInnerBox(ball, gameArea);
 
     switch (pointOfImpact) {
-        case Collisions.PointOfImpact.LEFT:
-        case Collisions.PointOfImpact.RIGHT:
+        case PointOfImpact.LEFT:
+        case PointOfImpact.RIGHT:
             bounceBallAgainstHorizontalWall(ball);
             break;
 
-        case Collisions.PointOfImpact.TOP:
+        case PointOfImpact.TOP:
             bounceBallAgainstTopWall(ball);
             break;
 
-        case Collisions.PointOfImpact.BOTTOM:
+        case PointOfImpact.BOTTOM:
             ballIsLost = true;
             break;
     }
@@ -157,8 +158,8 @@ function bounceBallAgainstTopWall(ball: Ball): void {
 }
 
 function handleBallToBatCollision(): void {
-    const pointOfImpact = Collisions.ballToBox(ball, bat);
-    if (pointOfImpact !== Collisions.PointOfImpact.TOP)
+    const pointOfImpact = Collisions.circleToBox(ball, ball.heading, bat);
+    if (pointOfImpact !== PointOfImpact.TOP)
         return;
 
     ball.invertY();
@@ -176,15 +177,15 @@ function handleBallToBrickCollision(): void {
     const bricksToCheck = getBricksAtAndAroundBallPosition(ball, bricks);
 
     for (let brick of bricksToCheck.filter(b => b?.isActive)) {
-        const pointOfImpact = Collisions.ballToBox(ball, brick);
+        const pointOfImpact = Collisions.circleToBox(ball, ball.heading, brick);
         switch (pointOfImpact) {
-            case Collisions.PointOfImpact.LEFT:
-            case Collisions.PointOfImpact.RIGHT:
+            case PointOfImpact.LEFT:
+            case PointOfImpact.RIGHT:
                 ball.invertX();
                 break;
 
-            case Collisions.PointOfImpact.TOP:
-            case Collisions.PointOfImpact.BOTTOM:
+            case PointOfImpact.TOP:
+            case PointOfImpact.BOTTOM:
                 ball.invertY();
                 break;
 
@@ -256,18 +257,6 @@ function handleGameOver(): void {
         (level >= 2 && getActiveBricks().length <= 0);
 
     gameState = isGameOver ? GameState.GAME_OVER : gameState;
-}
-
-function clearBackground(): void {
-    ctx.fillStyle = Colors.background;
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.fullHeight);
-}
-
-function drawBorders(): void {
-    ctx.fillStyle = Colors.border;
-    ctx.fillRect(0, 0, Constants.borderWidth, Constants.fullHeight);
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.borderWidth);
-    ctx.fillRect(Constants.fullWidth - Constants.borderWidth, 0, Constants.borderWidth, Constants.fullHeight);
 }
 
 function touchEnd(e: TouchEvent) {

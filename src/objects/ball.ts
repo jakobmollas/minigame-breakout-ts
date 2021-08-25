@@ -1,6 +1,7 @@
-import { Vector2d } from "./vector2d.js";
+import { ICircle } from "../primitives/icircle.js";
+import { Vector2d } from "../primitives/vector2d.js";
 
-export class Ball {
+export class Ball implements ICircle {
     private _pos: Vector2d;
     private _radius: number = 0;
     private _currentDirection: Vector2d;

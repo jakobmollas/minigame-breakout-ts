@@ -1,22 +1,14 @@
-import { Ball } from './ball.js';
-import { Bat } from './bat.js';
-import { Brick } from './brick.js';
-import { GameTime } from './gametime.js';
-import { Point2d } from './point2d.js';
-import { Box } from './box.js';
-import * as UI from "./ui.js";
-import * as Collisions from './collisions.js';
-import * as Constants from './constants.js';
-import * as Colors from "./colors.js";
-var GameState;
-(function (GameState) {
-    GameState[GameState["LAUNCHING"] = 0] = "LAUNCHING";
-    GameState[GameState["RUNNING"] = 1] = "RUNNING";
-    GameState[GameState["LEVEL_UP"] = 2] = "LEVEL_UP";
-    GameState[GameState["BALL_LOST"] = 3] = "BALL_LOST";
-    GameState[GameState["GAME_OVER"] = 4] = "GAME_OVER";
-})(GameState || (GameState = {}));
-;
+import { Point2d } from './primitives/point2d.js';
+import { Box } from './primitives/box.js';
+import { Ball } from './objects/ball.js';
+import { Bat } from './objects/bat.js';
+import { Brick } from './objects/brick.js';
+import { GameTime } from './logic/gametime.js';
+import * as UI from "./logic/ui.js";
+import * as Collisions from './logic/collisions.js';
+import * as Constants from './definitions/constants.js';
+import * as Colors from "./definitions/colors.js";
+import { GameState, PointOfImpact } from './definitions/constants.js';
 let ball, bat, bricks;
 let score, lives, gameSpeed, level, numberOfBrickHits;
 let topWallHasBeenHit, topRowsHasBeenHit, ballIsLost;
@@ -65,8 +57,9 @@ function processGameLogic() {
     }
 }
 function render() {
-    clearBackground();
-    drawBorders();
+    UI.clearBackground(ctx);
+    UI.drawBorders(ctx);
+    UI.drawGameStats(ctx, score, lives);
     // game objects are drawn in an area excluding borders
     ctx.save();
     ctx.translate(Constants.borderWidth, Constants.borderWidth);
@@ -74,7 +67,6 @@ function render() {
     bat.draw(ctx);
     ball.draw(ctx);
     ctx.restore();
-    UI.drawGameStats(ctx, score, lives);
     switch (gameState) {
         case GameState.LEVEL_UP:
             UI.drawLevelUp(ctx);
@@ -108,16 +100,16 @@ function positionBallOnTopOfBat(ball, bat) {
 }
 function handleBallToWallCollision() {
     const gameArea = new Box(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
-    const pointOfImpact = Collisions.ballToInnerBox(ball, gameArea);
+    const pointOfImpact = Collisions.circleToInnerBox(ball, gameArea);
     switch (pointOfImpact) {
-        case Collisions.PointOfImpact.LEFT:
-        case Collisions.PointOfImpact.RIGHT:
+        case PointOfImpact.LEFT:
+        case PointOfImpact.RIGHT:
             bounceBallAgainstHorizontalWall(ball);
             break;
-        case Collisions.PointOfImpact.TOP:
+        case PointOfImpact.TOP:
             bounceBallAgainstTopWall(ball);
             break;
-        case Collisions.PointOfImpact.BOTTOM:
+        case PointOfImpact.BOTTOM:
             ballIsLost = true;
             break;
     }
@@ -132,8 +124,8 @@ function bounceBallAgainstTopWall(ball) {
     topWallHasBeenHit = true;
 }
 function handleBallToBatCollision() {
-    const pointOfImpact = Collisions.ballToBox(ball, bat);
-    if (pointOfImpact !== Collisions.PointOfImpact.TOP)
+    const pointOfImpact = Collisions.circleToBox(ball, ball.heading, bat);
+    if (pointOfImpact !== PointOfImpact.TOP)
         return;
     ball.invertY();
     ball.y = bat.y - ball.radius;
@@ -146,14 +138,14 @@ function handleBallToBatCollision() {
 function handleBallToBrickCollision() {
     const bricksToCheck = getBricksAtAndAroundBallPosition(ball, bricks);
     for (let brick of bricksToCheck.filter(b => b === null || b === void 0 ? void 0 : b.isActive)) {
-        const pointOfImpact = Collisions.ballToBox(ball, brick);
+        const pointOfImpact = Collisions.circleToBox(ball, ball.heading, brick);
         switch (pointOfImpact) {
-            case Collisions.PointOfImpact.LEFT:
-            case Collisions.PointOfImpact.RIGHT:
+            case PointOfImpact.LEFT:
+            case PointOfImpact.RIGHT:
                 ball.invertX();
                 break;
-            case Collisions.PointOfImpact.TOP:
-            case Collisions.PointOfImpact.BOTTOM:
+            case PointOfImpact.TOP:
+            case PointOfImpact.BOTTOM:
                 ball.invertY();
                 break;
             default:
@@ -216,16 +208,6 @@ function handleGameOver() {
     const isGameOver = (lives <= 1 && gameState === GameState.BALL_LOST) ||
         (level >= 2 && getActiveBricks().length <= 0);
     gameState = isGameOver ? GameState.GAME_OVER : gameState;
-}
-function clearBackground() {
-    ctx.fillStyle = Colors.background;
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.fullHeight);
-}
-function drawBorders() {
-    ctx.fillStyle = Colors.border;
-    ctx.fillRect(0, 0, Constants.borderWidth, Constants.fullHeight);
-    ctx.fillRect(0, 0, Constants.fullWidth, Constants.borderWidth);
-    ctx.fillRect(Constants.fullWidth - Constants.borderWidth, 0, Constants.borderWidth, Constants.fullHeight);
 }
 function touchEnd(e) {
     e.preventDefault();

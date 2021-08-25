@@ -1,4 +1,17 @@
-import * as Colors from "./colors.js";
+import * as Colors from "../definitions/colors.js";
+import * as Constants from "../definitions/constants.js";
+
+function clearBackground(ctx: CanvasRenderingContext2D): void {
+    ctx.fillStyle = Colors.background;
+    ctx.fillRect(0, 0, Constants.fullWidth, Constants.fullHeight);
+}
+
+function drawBorders(ctx: CanvasRenderingContext2D): void {
+    ctx.fillStyle = Colors.border;
+    ctx.fillRect(0, 0, Constants.borderWidth, Constants.fullHeight);
+    ctx.fillRect(0, 0, Constants.fullWidth, Constants.borderWidth);
+    ctx.fillRect(Constants.fullWidth - Constants.borderWidth, 0, Constants.borderWidth, Constants.fullHeight);
+}
 
 function drawGameStats(ctx: CanvasRenderingContext2D, score: number, lives: number): void {
     setFont(ctx, 1);
@@ -47,4 +60,4 @@ function setFont(ctx: CanvasRenderingContext2D, sizeInRem: number): void {
     ctx.textBaseline = 'middle';
 }
 
-export { drawGameStats, drawLevelUp, drawBallLost, drawGameOver };
+export { clearBackground, drawBorders, drawGameStats, drawLevelUp, drawBallLost, drawGameOver };

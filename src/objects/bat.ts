@@ -1,4 +1,4 @@
-import { IBox } from "./iBox.js";
+import { IBox } from "../primitives/ibox.js";
 
 export class Bat implements IBox {
     private _initialWidth: number = 0;

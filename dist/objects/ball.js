@@ -1,4 +1,4 @@
-import { Vector2d } from "./vector2d.js";
+import { Vector2d } from "../primitives/vector2d.js";
 export class Ball {
     constructor(x, y, radius, direction) {
         this._radius = 0;
