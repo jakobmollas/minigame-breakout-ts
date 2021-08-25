@@ -4,7 +4,7 @@ import { Brick } from './brick.js';
 import { GameTime } from './gametime.js';
 import { Point2d } from './point2d.js';
 import { Rectangle } from './rectangle.js';
-import { UI } from "./ui.js";
+import * as UI from "./ui.js";
 import * as Collisions from './collisions.js';
 import * as Constants from './constants.js';
 import * as Colors from "./colors.js";
@@ -130,16 +130,16 @@ function handleBallToWallCollision(): void {
     const pointOfImpact = Collisions.ballToInnerRectangle(ball, gameArea);
 
     switch (pointOfImpact) {
-        case PointOfImpact.LEFT:
-        case PointOfImpact.RIGHT:
+        case Collisions.PointOfImpact.LEFT:
+        case Collisions.PointOfImpact.RIGHT:
             bounceBallAgainstHorizontalWall(ball);
             break;
 
-        case PointOfImpact.TOP:
+        case Collisions.PointOfImpact.TOP:
             bounceBallAgainstTopWall(ball);
             break;
 
-        case PointOfImpact.BOTTOM:
+        case Collisions.PointOfImpact.BOTTOM:
             ballIsLost = true;
             break;
     }
@@ -158,7 +158,7 @@ function bounceBallAgainstTopWall(ball: Ball): void {
 
 function handleBallToBatCollision(): void {
     const pointOfImpact = Collisions.ballToRectangle(ball, bat.rectangle);
-    if (pointOfImpact !== PointOfImpact.TOP)
+    if (pointOfImpact !== Collisions.PointOfImpact.TOP)
         return;
 
     ball.invertY();
@@ -178,13 +178,13 @@ function handleBallToBrickCollision(): void {
     for (let brick of bricksToCheck.filter(b => b?.active)) {
         const pointOfImpact = Collisions.ballToRectangle(ball, brick.rectangle);
         switch (pointOfImpact) {
-            case PointOfImpact.LEFT:
-            case PointOfImpact.RIGHT:
+            case Collisions.PointOfImpact.LEFT:
+            case Collisions.PointOfImpact.RIGHT:
                 ball.invertX();
                 break;
 
-            case PointOfImpact.TOP:
-            case PointOfImpact.BOTTOM:
+            case Collisions.PointOfImpact.TOP:
+            case Collisions.PointOfImpact.BOTTOM:
                 ball.invertY();
                 break;
 

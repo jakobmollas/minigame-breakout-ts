@@ -1,14 +1,9 @@
 export class Rectangle {
-    left: number = 0;
-    top: number = 0;
-    width: number = 0;
-    height: number = 0;
-
-    constructor(left: number, top: number, width: number, height: number) {
-        this.left = left;
-        this.top = top;
-        this.width = width;
-        this.height = height;
+    constructor(
+        public left: number,
+        public top: number,
+        public width: number,
+        public height: number) {
     }
 
     get right(): number { return this.left + this.width; }

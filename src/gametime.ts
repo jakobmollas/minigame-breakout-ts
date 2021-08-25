@@ -4,9 +4,6 @@ export class GameTime {
     private _fps: number = 0;
     private _lastTimestamp: number = 0;
 
-    constructor() {
-    }
-
     update(): void {
         this._deltaTime = this._lastTimestamp ? performance.now() - this._lastTimestamp : 0;
         this._lastTimestamp = performance.now();
