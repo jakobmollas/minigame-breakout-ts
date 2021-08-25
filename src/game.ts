@@ -1,4 +1,3 @@
-import { Point2d } from './primitives/point2d.js';
 import { Box } from './primitives/box.js';
 
 import { Ball } from './objects/ball.js';
@@ -8,6 +7,7 @@ import { Brick } from './objects/brick.js';
 import { GameTime } from './logic/gametime.js';
 import * as UI from "./logic/ui.js";
 import * as Collisions from './logic/collisions.js';
+import * as Stage from './logic/stage.js';
 
 import * as Constants from './definitions/constants.js';
 import * as Colors from "./definitions/colors.js";
@@ -103,7 +103,7 @@ function render(): void {
 }
 
 function moveBat(): void {
-    bat.x = clamp(inputCenterX - bat.width / 2, 0, Constants.gameAreaWidth - bat.width)
+    bat.x = clamp(inputCenterX - bat.width / 2, 0, Constants.stageWidth - bat.width)
 }
 
 function moveBall(): void {
@@ -117,8 +117,8 @@ function moveBall(): void {
 
 function updateBallColor(): void {
     // Match color of bricks at current row
-    const rowNumber = getBrickCoordsFromGameAreaXY(ball.x, ball.y).y;
-    ball.color = getRowColor(rowNumber);
+    const rowNumber = Stage.getCellFromStageXY(ball.x, ball.y).y;
+    ball.color = Stage.getRowColor(rowNumber);
 }
 
 function positionBallOnTopOfBat(ball: Ball, bat: Bat): void {
@@ -127,8 +127,8 @@ function positionBallOnTopOfBat(ball: Ball, bat: Bat): void {
 }
 
 function handleBallToWallCollision(): void {
-    const gameArea = new Box(0, 0, Constants.gameAreaWidth, Constants.gameAreaHeight);
-    const pointOfImpact = Collisions.circleToInnerBox(ball, gameArea);
+    const stage = new Box(0, 0, Constants.stageWidth, Constants.stageHeight);
+    const pointOfImpact = Collisions.circleToInnerBox(ball, stage);
 
     switch (pointOfImpact) {
         case PointOfImpact.LEFT:
@@ -148,7 +148,7 @@ function handleBallToWallCollision(): void {
 
 function bounceBallAgainstHorizontalWall(ball: Ball): void {
     ball.invertX();
-    ball.x = clamp(ball.x, ball.radius, Constants.gameAreaWidth - ball.radius);
+    ball.x = clamp(ball.x, ball.radius, Constants.stageWidth - ball.radius);
 }
 
 function bounceBallAgainstTopWall(ball: Ball): void {
@@ -204,13 +204,13 @@ function handleBallToBrickCollision(): void {
 
 function getBricksAtAndAroundBallPosition(ball: Ball, bricks: Brick[]): Brick[] {
     let targetBricks = [];
-    let bc = getBrickCoordsFromGameAreaXY(ball.x, ball.y);
+    let bc = Stage.getCellFromStageXY(ball.x, ball.y);
 
-    let above = getBrickAtCell(bricks, bc.x, bc.y - 1);
-    let below = getBrickAtCell(bricks, bc.x, bc.y + 1);
-    let left = getBrickAtCell(bricks, bc.x - 1, bc.y);
-    let right = getBrickAtCell(bricks, bc.x + 1, bc.y);
-    let center = getBrickAtCell(bricks, bc.x, bc.y);
+    let above = Stage.getBrickAtCell(bricks, bc.x, bc.y - 1);
+    let below = Stage.getBrickAtCell(bricks, bc.x, bc.y + 1);
+    let left = Stage.getBrickAtCell(bricks, bc.x - 1, bc.y);
+    let right = Stage.getBrickAtCell(bricks, bc.x + 1, bc.y);
+    let center = Stage.getBrickAtCell(bricks, bc.x, bc.y);
 
     if (above) targetBricks.push(above);
     if (below) targetBricks.push(below);
@@ -266,12 +266,12 @@ function touchEnd(e: TouchEvent) {
 
 function touchMove(e: TouchEvent) {
     let xPos = e.changedTouches[0]?.pageX ?? 0;
-    inputCenterX = map(xPos, 0, window.innerWidth, 0, Constants.gameAreaWidth);
+    inputCenterX = map(xPos, 0, window.innerWidth, 0, Constants.stageWidth);
 }
 
 function mouseMove(e: MouseEvent) {
     e.preventDefault();
-    inputCenterX = map(e.pageX, 0, window.innerWidth, 0, Constants.gameAreaWidth);
+    inputCenterX = map(e.pageX, 0, window.innerWidth, 0, Constants.stageWidth);
 }
 
 function mouseDown(e: MouseEvent) {
@@ -303,13 +303,13 @@ function createGameObjects(): void {
     ball = new Ball(0, 0, Constants.ballRadius, Constants.initialBallDirection);
 
     bat = new Bat(
-        Constants.gameAreaWidth / 2 - Constants.batWidth / 2,
-        Constants.gameAreaHeight - 2 * Constants.batHeight,
+        Constants.stageWidth / 2 - Constants.batWidth / 2,
+        Constants.stageHeight - 2 * Constants.batHeight,
         Constants.batWidth,
         Constants.batHeight,
         Colors.bat);
 
-    bricks = createBricks();
+    bricks = Stage.createBricks();
 }
 
 function startNewGame(): void {
@@ -346,67 +346,8 @@ function prepareNextBall(): void {
     gameState = GameState.LAUNCHING;
 }
 
-function createBricks(): Brick[] {
-    let bricks: Brick[] = [];
-    for (let row = 0; row < Constants.rows; row++) {
-        for (let col = 0; col < Constants.columns; col++) {
-            const x = col * Constants.brickWidth;
-            const y = row * Constants.brickHeight;
-            const color = getRowColor(row);
-            const score = getRowScore(row);
-            const isTopRow = row >= 4 && row <= 5;
-            const isActive = row > 3;
-
-            bricks.push(
-                new Brick(
-                    x, y,
-                    Constants.brickWidth, Constants.brickHeight,
-                    color, score, isTopRow, isActive));
-        }
-    }
-
-    return bricks;
-}
-
 function resetBricks(): void {
     bricks.forEach(b => b?.reset());
-}
-
-function getRowColor(rowNumber: number): string {
-    switch (rowNumber) {
-        case 4: return Colors.brick1;
-        case 5: return Colors.brick2;
-        case 6: return Colors.brick3;
-        case 7: return Colors.brick4;
-        case 8: return Colors.brick5;
-        case 9: return Colors.brick6;
-
-        default: return Colors.brick1;
-    }
-}
-
-function getRowScore(rowNumber: number): number {
-    switch (rowNumber) {
-        case 4: return 7;
-        case 5: return 7;
-        case 6: return 4;
-        case 7: return 4;
-        case 8: return 1;
-        case 9: return 1;
-        default: return 0;
-    }
-}
-
-function getBrickCoordsFromGameAreaXY(x: number, y: number): Point2d {
-    let col = Math.floor(x / Constants.brickWidth);
-    let row = Math.floor(y / Constants.brickHeight);
-
-    return new Point2d(col, row);
-}
-
-function getBrickAtCell(bricks: Brick[], col: number, row: number): Brick | null {
-    const index = row * Constants.columns + col;
-    return index >= bricks.length ? null : bricks[index];
 }
 
 function getActiveBricks(): Brick[] {

@@ -4,10 +4,10 @@ export enum PointOfImpact { NONE, LEFT, RIGHT, TOP, BOTTOM };
 export enum GameState { LAUNCHING, RUNNING, LEVEL_UP, BALL_LOST, GAME_OVER };
 
 export const borderWidth = 10;
-export const gameAreaWidth = 540;
-export const gameAreaHeight = 360;
-export const fullWidth = gameAreaWidth + 2 * borderWidth;
-export const fullHeight = gameAreaHeight + borderWidth;
+export const stageWidth = 540;
+export const stageHeight = 360;
+export const fullWidth = stageWidth + 2 * borderWidth;
+export const fullHeight = stageHeight + borderWidth;
 
 export const columns = 18;
 export const rows = 10;
