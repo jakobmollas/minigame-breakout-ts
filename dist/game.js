@@ -39,11 +39,11 @@ function setupCanvasContext() {
     const canvas = document.getElementById("game-canvas");
     canvas.width = Constants.fullWidth;
     canvas.height = Constants.fullHeight;
-    const dpr = 1 / (window.devicePixelRatio || 1);
-    canvas.width = canvas.width * dpr;
-    canvas.height = canvas.height * dpr;
+    // const dpr = 1 / (window.devicePixelRatio || 1);
+    // canvas.width = canvas.width * dpr;
+    // canvas.height = canvas.height * dpr;
     let ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
+    //ctx.scale(dpr, dpr);
     return ctx;
 }
 function mainLoop() {
